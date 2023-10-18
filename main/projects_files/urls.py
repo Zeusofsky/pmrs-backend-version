@@ -15,7 +15,8 @@ router.register('api/reportVisit', ReportVisitAPI, basename='reportVisit')
 urlpatterns = [
     path('api/reportdox/', ReportDoxAPI.as_view()),
     path('api/zoneImages/', ZoneImagesAPI.as_view()),
-    path('api/zoneImages/<int:id>/', ZoneImagesAPI.as_view()),    
+    path('api/zoneImages/<int:pk>/', ZoneImagesAPI.as_view()),    
+    path('api/updateZoneImage/<int:pk>/', updateZoneImage),    
     path('api/zoneImages/<int:contract_id>/<int:date_id>/', ZoneImagesAPI.as_view()),    
 
     path('api/hseReportDox/contractList/<int:contract_id>/', HseReportDoxAPI.as_view({"get": "contractList"})),    

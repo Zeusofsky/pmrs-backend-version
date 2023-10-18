@@ -4,7 +4,7 @@ from django.db.models import Max, Q
 from rest_framework import viewsets, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from projects_files.models import *
@@ -325,6 +325,54 @@ class ReportVisitAPI(viewsets.ModelViewSet):
             return Response({"status": "error", "data": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(['put'])
+@permission_classes([permissions.IsAuthenticated])
+def updateZoneImage(request, pk):
+    try:
+        id = pk
+        data = request.data
+        contractId = int(data['contractid'])
+        zone = str(data['zone'])
+        dateId = data['dateid']
+        ppp = data['ppp']
+        app = data['app']
+        image1 = data['img1'] if 'img1' in data else None
+        description1 = data['description1']
+        image2 = data['img2'] if 'img2' in data else None
+        description2 = data['description2']
+        image3 = data['img3'] if 'img3' in data else None
+        description3 = data['description3']
+        
+        zoneObj = None
+        count = Zone.objects.filter(contractid__exact=contractId, zone__exact=zone).count()
+        if count == 0:
+            contract = Contract.objects.get(pk=contractId)
+            zoneObj = Zone.objects.create(contractid=contract, zone=zone)
+        else:
+            zoneObj = Zone.objects.get(contractid=contractId, zone=zone)
+            
+        date = ReportDate.objects.get(pk=dateId)
+        zoneimage = ZoneImage.objects.get(pk=id)
+        zoneimage.zoneid = zoneObj
+        zoneimage.dateid = date
+        zoneimage.ppp = ppp
+        zoneimage.app = app
+        if image1 and image1 is not None :
+            zoneimage.img1 = image1
+        zoneimage.description1 = description1
+        if image2 and image2 is not None :
+            zoneimage.img2 = image2
+        zoneimage.description2 = description2
+        if image3 and image3 is not None :
+            zoneimage.img3 = image3
+        zoneimage.description3 = description3
+        zoneimage.save()
+        
+        serializer = ZoneImagesSerializers(zoneimage, many=False)
+        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"status": "error", "data": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 class ZoneImagesAPI(APIView):
     permission_classes = [
         permissions.IsAuthenticated
@@ -356,7 +404,7 @@ class ZoneImagesAPI(APIView):
         except Exception as e:
             return Response({"status": "error", "data": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, format=None):
         try:
             data = request.data
             contractId = int(data['contractid'])
@@ -364,11 +412,11 @@ class ZoneImagesAPI(APIView):
             dateId = data['dateid']
             ppp = data['ppp']
             app = data['app']
-            img1 = data['img1']
+            img1 = data['img1'] if 'img1' in data else None
             description1 = data['description1']
-            img2 = data['img2']
+            img2 = data['img2'] if 'img2' in data else None
             description2 = data['description2']
-            img3 = data['img3']
+            img3 = data['img3'] if 'img3' in data else None
             description3 = data['description3']
             
             zoneObj = None
@@ -390,9 +438,9 @@ class ZoneImagesAPI(APIView):
         except Exception as e:
             return Response({"status": "error", "data": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    def put(self, request, *args, **kwargs):
+    def put(self, request, pk, format=None):
         try:
-            id = int(kwargs['id'])
+            id = pk
             data = request.data
             contractId = int(data['contractid'])
             zone = str(data['zone'])
@@ -436,9 +484,9 @@ class ZoneImagesAPI(APIView):
         except Exception as e:
             return Response({"status": "error", "data": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request, pk, format=None):
         try:
-            id = int(kwargs['id'])
+            id = pk
             zoneimage = ZoneImage.objects.get(pk=id)
             zoneId = zoneimage.zoneid.pk
             zoneimage.delete()

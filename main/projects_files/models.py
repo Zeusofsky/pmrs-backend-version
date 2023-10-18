@@ -403,17 +403,17 @@ class ZoneImage(models.Model):
     
     def imagepath1(self):
         if self.img1: 
-            return self.img1.name
+            return self.img1.name.split('/')[-1:][0]
         return ''
 
     def imagepath2(self):
         if self.img2:
-            return self.img2.name
+            return self.img2.name.split('/')[-1:][0]
         return ''
     
     def imagepath3(self):
         if self.img3:
-            return self.img3.name
+            return self.img3.name.split('/')[-1:][0]
         # 
         return ''
         

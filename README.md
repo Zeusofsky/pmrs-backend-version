@@ -1,18 +1,17 @@
-# Track and Trace Project
+# Project Reports Management 
 
-A web application using Django REST framework is a service of track and trace articles and shipments.
+A web application using Django REST Framework is a service of managing holding projects reports.
 
-The Track and Trace app provides API for getting information about articles and shipments along with corresponding weather information. 
+The Track and PMRS provides API for getting information about project progress along with providing dashboard reports for boards. 
 
 This app has the following features:
 
-- users can create/read/update/delete customers via rest api
-- users can create/read/update/delete shops via rest api
-- users can create/read/update/delete shipments via rest api
-- for getting actual weather data the Weather app uses OpenWeather api service https://openweathermap.org/api
-- users can retrieve weather information from OenWeatherMap by zip code and country code via rest api
-- users can retrieve weather information from OenWeatherMap by customer id via rest api
-- users can retrieve weather information from OenWeatherMap by zip code and country code trough celery async task via rest api
+- users can create/read/update/delete Base Info via rest api
+- users can create/read/update/delete monthly report such as Invoices, Budgets, Machinery, Project Progress, ect via rest api
+- users can create/read/update/delete projects documents and images shipments via rest api
+- users can retrieve report from users activity in this system environment via rest api
+- users can retrieve image reports from all zones of projects via rest api
+- users can retrieve report from all projects reports every month via rest api
 
 
 The application has been covered with unit tests.
@@ -20,7 +19,7 @@ The application has been covered with unit tests.
 ____
 ## Requirements
 
-- Python 3.7+
+- Python 3.*+
 - Django 3.1
 
 ## Packages
@@ -30,8 +29,6 @@ ____
 - django-cors-headers 
 - python-decouple
 - drf-spectacular (Open API)
-- celery
-- redis
 
 ## Installing
 
@@ -55,12 +52,6 @@ python manage.py migrate
 
 ## Usage
 
-before use async weather endpoint call create a worker as following:
-```
-celery -A main worker -l info
-```
-or
-```
-celery -A main worker -l info --logfile=celery.log --detach
-```
+
+
 

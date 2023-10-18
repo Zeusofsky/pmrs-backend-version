@@ -62,34 +62,3 @@ class ReportVisitSerializers(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ZoneImagesSerializers(serializers.ModelSerializer):
-    contract = serializers.ReadOnlyField
-    zone = serializers.ReadOnlyField
-    imagename1 = serializers.ReadOnlyField
-    imagename2 = serializers.ReadOnlyField
-    imagename3 = serializers.ReadOnlyField
-    
-    class Meta:
-        model = ZoneImage
-        fields = ('zoneimageid', 'zoneid', 'dateid', 'contract', 'zone', 'ppp', 'app', 'img1', 'imagepath1', 
-                  'description1', 'img2', 'imagepath2', 'description2', 'img3', 'imagepath3', 'description3')
-       
-        
-# class BookingSerializer(ModelSerializer):
-#     rooms = PrimaryKeyRelatedField(queryset=Room.objects.all(), many=True)
-#     guest = GuestSerializer
-
-#     class Meta:
-#         model = Booking
-#         fields = ['id', 'guest', 'rooms', 'booking_date', 'arrival_date', 'duration']
-
-#     def validate(self, data):
-#             rooms = data['rooms']
-#             arrival_date = data['arrival_date']
-#             duration = data['duration']
-
-#             # CHECK WHETHER ROOMS LIST ARE BOOKED BEFORE
-#             result = check_rooms_is_booked(rooms, arrival_date, duration)
-#             if result != '':
-#                 raise ValidationError(result)
-#             return data    

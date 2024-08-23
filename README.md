@@ -18,7 +18,7 @@ The application has been covered with unit tests.
 
 ____
 ## Requirements
-
+                               
 - Python 3.*+
 - Django 3.1
 
